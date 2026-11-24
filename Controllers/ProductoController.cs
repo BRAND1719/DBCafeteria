@@ -1,3 +1,7 @@
+// MODULO PRODUCTOS - Controlador
+// GET api/Producto (con filtro), GET api/Producto/{id}
+// POST / PUT / DELETE: crear, editar y eliminar productos
+
 using CafeteriaAPI.Data;
 using CafeteriaAPI.Models;
 using Microsoft.AspNetCore.Mvc;

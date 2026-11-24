@@ -1,3 +1,7 @@
+// MODULO PRODUCTOS - Acceso a datos
+// Procedimientos: sp_listaProductos, sp_obtenerProducto, sp_crearProducto,
+// sp_editarProducto y sp_eliminarProducto
+
 using CafeteriaAPI.Models;
 
 namespace CafeteriaAPI.Data
