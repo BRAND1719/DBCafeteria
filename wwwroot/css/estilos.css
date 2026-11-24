@@ -1,3 +1,10 @@
+/*
+  MODULO DISENO - Hoja de estilos general
+  Paleta de colores de la cafeteria en variables :root
+  Estilos de menu, tarjetas, tablas, formularios, botones y avisos
+  Diseno responsivo para celular y computadora
+*/
+
 :root {
   --cafe-oscuro: #123c3a;
   --cafe: #245d58;
