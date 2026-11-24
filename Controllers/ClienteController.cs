@@ -1,3 +1,7 @@
+// MODULO CLIENTES - Controlador
+// GET api/Cliente (con filtro), GET api/Cliente/{id}
+// POST / PUT / DELETE: crear, editar y eliminar clientes
+
 using CafeteriaAPI.Data;
 using CafeteriaAPI.Models;
 using Microsoft.AspNetCore.Mvc;

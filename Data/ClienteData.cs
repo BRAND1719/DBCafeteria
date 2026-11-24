@@ -1,3 +1,7 @@
+// MODULO CLIENTES - Acceso a datos
+// Procedimientos: sp_listaClientes, sp_obtenerCliente, sp_crearCliente,
+// sp_editarCliente y sp_eliminarCliente
+
 using CafeteriaAPI.Models;
 
 namespace CafeteriaAPI.Data
