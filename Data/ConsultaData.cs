@@ -1,3 +1,6 @@
+// MODULO REPORTES - Acceso a datos
+// Procedimientos: sp_dashboard, sp_productosExistenciaBaja y sp_productosMasVendidos
+
 using CafeteriaAPI.Models;
 
 namespace CafeteriaAPI.Data

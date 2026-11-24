@@ -1,3 +1,5 @@
+// MODULO REPORTES - Pantalla de reportes (existencia baja y mas vendidos)
+
 (function () {
   const limite = document.getElementById('limite');
   const top = document.getElementById('top');

@@ -1,3 +1,5 @@
+// MODULO REPORTES - Pantalla de dashboard
+
 (async function () {
   const stats = document.getElementById('stats');
   const bajos = document.querySelector('#tabla-bajos tbody');

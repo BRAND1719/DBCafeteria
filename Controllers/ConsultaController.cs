@@ -1,3 +1,8 @@
+// MODULO REPORTES - Controlador
+// GET api/Consulta/dashboard: indicadores generales
+// GET api/Consulta/existencia-baja: productos con existencia baja
+// GET api/Consulta/mas-vendidos: productos mas vendidos
+
 using CafeteriaAPI.Data;
 using Microsoft.AspNetCore.Mvc;
 
