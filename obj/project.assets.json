@@ -1693,11 +1693,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\brand\\Desktop\\CafeteriaAPI\\CafeteriaAPI.csproj",
+      "projectUniqueName": "C:\\Users\\brand\\Desktop\\Cafeteria\\CafeteriaAPI.csproj",
       "projectName": "CafeteriaAPI",
-      "projectPath": "C:\\Users\\brand\\Desktop\\CafeteriaAPI\\CafeteriaAPI.csproj",
+      "projectPath": "C:\\Users\\brand\\Desktop\\Cafeteria\\CafeteriaAPI.csproj",
       "packagesPath": "C:\\Users\\brand\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\brand\\Desktop\\CafeteriaAPI\\obj\\",
+      "outputPath": "C:\\Users\\brand\\Desktop\\Cafeteria\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
