@@ -1,3 +1,7 @@
+// MODULO CATEGORIAS - Controlador
+// GET api/Categoria (con filtro), GET api/Categoria/{id}
+// POST / PUT / DELETE: crear, editar y eliminar categorias
+
 using CafeteriaAPI.Data;
 using CafeteriaAPI.Models;
 using Microsoft.AspNetCore.Mvc;

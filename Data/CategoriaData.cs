@@ -1,3 +1,7 @@
+// MODULO CATEGORIAS - Acceso a datos
+// Procedimientos: sp_listaCategorias, sp_obtenerCategoria, sp_crearCategoria,
+// sp_editarCategoria y sp_eliminarCategoria
+
 using CafeteriaAPI.Models;
 
 namespace CafeteriaAPI.Data
