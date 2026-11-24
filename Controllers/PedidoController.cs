@@ -1,3 +1,9 @@
+// MODULO PEDIDOS - Controlador
+// GET api/Pedido: consulta de pedidos con filtros
+// GET api/Pedido/{id}: detalle de un pedido
+// POST api/Pedido: registrar pedido
+// PUT api/Pedido/{id}/cancelar: cancelar pedido
+
 using CafeteriaAPI.Data;
 using CafeteriaAPI.Models;
 using Microsoft.AspNetCore.Mvc;

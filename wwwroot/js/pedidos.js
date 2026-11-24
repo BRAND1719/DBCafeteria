@@ -1,3 +1,6 @@
+// MODULO PEDIDOS - Pantalla de consulta de pedidos
+// Filtros por cliente, estatus y fechas
+
 (async function () {
   const tbody = document.querySelector('#tabla tbody');
   const selCliente = document.getElementById('f-cliente');

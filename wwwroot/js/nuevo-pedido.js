@@ -1,3 +1,6 @@
+// MODULO PEDIDOS - Pantalla de nuevo pedido
+// Selecciona cliente, forma de pago y productos para registrar el pedido
+
 (async function () {
   const selCliente = document.getElementById('cliente');
   const selPago = document.getElementById('pago');

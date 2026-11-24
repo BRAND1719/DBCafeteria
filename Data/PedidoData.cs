@@ -1,3 +1,7 @@
+// MODULO PEDIDOS - Acceso a datos
+// Procedimientos: sp_consultarPedidos, sp_obtenerPedido, sp_crearPedido
+// y sp_cancelarPedido
+
 using System.Data;
 using System.Text.Json;
 using CafeteriaAPI.Models;
