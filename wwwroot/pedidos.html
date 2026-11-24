@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pedidos · Cafetería</title>
+  <meta name="theme-color" content="#123c3a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Cafetería">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" href="icons/favicon-48.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body data-pagina="pedidos" data-titulo="Pedidos">
+<div class="layout">
+  <aside id="sidebar" class="sidebar"></aside>
+  <div class="principal">
+    <header id="topbar" class="topbar"></header>
+    <main class="contenido">
+
+      <div class="barra-herramientas">
+        <div class="filtro"><label for="f-cliente">Cliente</label>
+          <select id="f-cliente"><option value="">Todos</option></select></div>
+        <div class="filtro"><label for="f-estatus">Estatus</label>
+          <select id="f-estatus"><option value="">Todos</option><option>Confirmado</option><option>Cancelado</option></select></div>
+        <div class="filtro"><label for="f-desde">Desde</label><input type="date" id="f-desde"></div>
+        <div class="filtro"><label for="f-hasta">Hasta</label><input type="date" id="f-hasta"></div>
+        <button class="btn btn-primario" id="btn-filtrar">Filtrar</button>
+        <button class="btn btn-secundario" id="btn-limpiar">Limpiar</button>
+      </div>
+      <p id="resumen" style="color:var(--suave);margin:0 0 12px"></p>
+      <div class="tarjeta"><div class="tabla-wrap">
+        <table id="tabla">
+          <thead><tr><th>Pedido</th><th>Fecha</th><th>Cliente</th><th>Pago</th><th class="num">Total</th><th>Estatus</th><th class="col-acciones">Acciones</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div></div>
+    </main>
+  </div>
+</div>
+
+<dialog id="dlg-detalle" class="dialogo dialogo-ancho">
+  <div class="dialogo-cab"><h2 id="detalle-titulo">Pedido</h2><button type="button" class="cerrar" data-cerrar aria-label="Cerrar">×</button></div>
+  <div class="dialogo-cuerpo" id="detalle-cuerpo"></div>
+  <div class="dialogo-pie"><button type="button" class="btn btn-secundario" data-cerrar>Cerrar</button></div>
+</dialog>
+<script src="js/app.js"></script>
+<script src="js/pedidos.js"></script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Usuarios · Cafetería</title>
+  <meta name="theme-color" content="#123c3a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Cafetería">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" href="icons/favicon-48.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body data-pagina="usuarios" data-titulo="Usuarios">
+<div class="layout">
+  <aside id="sidebar" class="sidebar"></aside>
+  <div class="principal">
+    <header id="topbar" class="topbar"></header>
+    <main class="contenido">
+
+      <div class="barra-herramientas">
+        <div class="grow"><input type="search" id="buscar" placeholder="Buscar por nombre, correo o rol…" aria-label="Buscar"></div>
+        <div id="filtros-extra" style="display:flex;gap:10px"></div>
+        <button class="btn btn-primario" id="btn-nuevo">+ Nuevo usuario</button>
+      </div>
+      <div class="tarjeta"><div class="tabla-wrap"><table id="tabla"><thead></thead><tbody></tbody></table></div></div>
+    </main>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/crud.js"></script>
+<script>
+iniciarCrud({
+  entidad: 'Usuario', plural: 'usuarios', ruta: '/Usuario', id: 'idUsuario',
+  columnas: [
+    { titulo: 'Nombre', campo: 'nombre' },
+    { titulo: 'Correo', campo: 'correo' },
+    { titulo: 'Rol', render: u => '<span class="badge ' + (u.rol === 'Administrador' ? 'badge-aviso' : 'badge-gris') + '">' + esc(u.rol) + '</span>' },
+    { titulo: 'Estatus', render: u => badgeEstatus(u.estatus) }
+  ],
+  campos: [
+    { campo: 'nombre', etiqueta: 'Nombre completo', requerido: true, max: 100, completo: true },
+    { campo: 'correo', etiqueta: 'Correo', tipo: 'email', requerido: true, max: 100, completo: true },
+    { campo: 'contrasena', etiqueta: 'Contraseña', tipo: 'password', requeridoAlCrear: true, max: 50 },
+    { campo: 'rol', etiqueta: 'Rol', tipo: 'select', requerido: true,
+      opciones: [{ valor: 'Administrador', texto: 'Administrador' }, { valor: 'Mesero', texto: 'Mesero' }] },
+    { campo: 'estatus', etiqueta: 'Estatus', tipo: 'estatus' }
+  ]
+});
+</script>
+</body>
+</html>

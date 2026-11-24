@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Productos · Cafetería</title>
+  <meta name="theme-color" content="#123c3a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Cafetería">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" href="icons/favicon-48.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body data-pagina="productos" data-titulo="Productos">
+<div class="layout">
+  <aside id="sidebar" class="sidebar"></aside>
+  <div class="principal">
+    <header id="topbar" class="topbar"></header>
+    <main class="contenido">
+
+      <div class="barra-herramientas">
+        <div class="grow"><input type="search" id="buscar" placeholder="Buscar producto…" aria-label="Buscar"></div>
+        <div id="filtros-extra" style="display:flex;gap:10px"></div>
+        <button class="btn btn-primario" id="btn-nuevo">+ Nuevo producto</button>
+      </div>
+      <div class="tarjeta"><div class="tabla-wrap"><table id="tabla"><thead></thead><tbody></tbody></table></div></div>
+    </main>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/crud.js"></script>
+<script>
+const cargarCategorias = async () => {
+  const r = await api('/Categoria');
+  return r.ok ? r.data.filter(c => c.estatus).map(c => ({ valor: c.idCategoria, texto: c.nombre })) : [];
+};
+
+iniciarCrud({
+  entidad: 'Producto', plural: 'productos', ruta: '/Producto', id: 'idProducto',
+  columnas: [
+    { titulo: 'Producto', render: p => esc(p.nombre) + (p.descripcion ? '<small>' + esc(p.descripcion) + '</small>' : '') },
+    { titulo: 'Categoría', campo: 'nombreCategoria' },
+    { titulo: 'Precio', numerico: true, render: p => money(p.precio) },
+    { titulo: 'Existencia', numerico: true, render: p => badgeExistencia(p.existencia) },
+    { titulo: 'Estatus', render: p => badgeEstatus(p.estatus) }
+  ],
+  campos: [
+    { campo: 'nombre', etiqueta: 'Nombre', requerido: true, max: 100, completo: true },
+    { campo: 'idCategoria', etiqueta: 'Categoría', tipo: 'select', requerido: true, numero: true, opciones: cargarCategorias },
+    { campo: 'estatus', etiqueta: 'Estatus', tipo: 'estatus' },
+    { campo: 'precio', etiqueta: 'Precio', tipo: 'number', requerido: true, min: 0, paso: '0.01' },
+    { campo: 'existencia', etiqueta: 'Existencia', tipo: 'number', entero: true, requerido: true, min: 0, paso: '1' },
+    { campo: 'descripcion', etiqueta: 'Descripción', tipo: 'textarea', max: 200, completo: true }
+  ],
+  filtrosExtra: [
+    {
+      parametro: 'idCategoria', etiqueta: 'Todas las categorías',
+      cargar: async () => {
+        const r = await api('/Categoria');
+        return r.ok ? r.data.map(c => ({ valor: c.idCategoria, texto: c.nombre })) : [];
+      }
+    }
+  ]
+});
+</script>
+</body>
+</html>

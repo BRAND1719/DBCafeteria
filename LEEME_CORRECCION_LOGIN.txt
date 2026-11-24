@@ -1,0 +1,25 @@
+CORRECCIÓN DEL ERROR "Error del servidor: Estatus" EN EL LOGIN
+
+CAUSA
+El procedimiento almacenado dbo.sp_loginUsuario devuelve IdUsuario, Nombre, Correo y Rol, pero el método que lee el resultado en Data/UsuarioData.cs trataba también de leer Estatus. Esto provocaba una excepción cuando el correo y la contraseña eran válidos.
+
+SOLUCIÓN
+Se agregó MapearLogin en Data/UsuarioData.cs que lee únicamente las columnas que devuelve el procedimiento. Se marca Estatus=true porque dbo.sp_loginUsuario devuelve únicamente usuarios con Estatus=1. El mapeo completo permanece para Listar y Obtener usuarios.
+
+PASOS
+1. Descomprime este ZIP en una carpeta nueva.
+2. Abre CafeteriaAPI/CafeteriaAPI.csproj en Visual Studio.
+3. Detén cualquier ejecución anterior de CafeteriaAPI.
+4. Compila la solución y ejecuta F5.
+5. Abre la dirección local que muestra Visual Studio y vuelve a intentar iniciar sesión.
+6. Si la página conserva la apariencia anterior, presiona Ctrl+F5 en el navegador para refrescar CSS y JS.
+
+SI YA ESTÁS TRABAJANDO EN TU PROPIO PROYECTO
+En lugar de reemplazar todo, copia solo Data/UsuarioData.cs (disponible también aparte como UsuarioData_CORREGIDO.cs) en la misma ruta dentro de tu proyecto existente; con ello conservas tus cambios en los demás archivos.
+
+BASE DE DATOS
+No hace falta volver a ejecutar Scripts.sql: esta corrección es solo de C#.
+La cadena actual utiliza autenticación de Windows con la instancia BRAND_19LAP\MSSQLSERVEREXP y la base DBCafeteria. No se modificaron credenciales.
+
+NOTA
+No se pudo probar una conexión real a tu SQL Server desde este entorno, ni compilar con dotnet porque el SDK .NET no está instalado aquí.

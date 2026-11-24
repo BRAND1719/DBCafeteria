@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard · Cafetería</title>
+  <meta name="theme-color" content="#123c3a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Cafetería">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" href="icons/favicon-48.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body data-pagina="dashboard" data-titulo="Dashboard">
+<div class="layout">
+  <aside id="sidebar" class="sidebar"></aside>
+  <div class="principal">
+    <header id="topbar" class="topbar"></header>
+    <main class="contenido">
+
+      <div class="grid-stats" id="stats"><div class="vacio">Cargando indicadores…</div></div>
+      <div class="grid-2">
+        <div class="tarjeta">
+          <h2 class="tarjeta-titulo">Existencia baja</h2>
+          <p class="tarjeta-sub">Productos con 5 piezas o menos</p>
+          <div class="tabla-wrap"><table id="tabla-bajos"><tbody></tbody></table></div>
+        </div>
+        <div class="tarjeta">
+          <h2 class="tarjeta-titulo">Más vendidos</h2>
+          <p class="tarjeta-sub">Top 5 en pedidos confirmados</p>
+          <div class="tabla-wrap"><table id="tabla-top"><tbody></tbody></table></div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>

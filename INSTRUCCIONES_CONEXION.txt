@@ -1,0 +1,9 @@
+CONEXION SQL SERVER - CAFETERIA API
+
+1. Verifica que SQL Server (MSSQLSERVEREXP) este iniciado.
+2. Verifica que DBCafeteria exista en esa instancia.
+3. El proyecto usa autenticacion Windows (Integrated Security=True). El usuario de Windows que ejecute la API debe tener acceso a DBCafeteria y permisos para ejecutar los procedimientos almacenados.
+4. Abre CafeteriaAPI.csproj en Visual Studio y ejecuta el proyecto.
+5. Si tu instancia usa autenticacion SQL en vez de Windows, configura CadenaSQL mediante Secret Manager o una variable de entorno ConnectionStrings__CadenaSQL, con Integrated Security=False y User ID/Password. No guardes contrasenas en el codigo.
+6. El archivo Scripts.sql original no se ejecuta automaticamente; contiene CREATE DATABASE, tablas y procedimientos. Si DBCafeteria ya existe, NO ejecutes de nuevo el script completo sin revisar su efecto sobre los datos.
+7. La conexion no pudo comprobarse desde este entorno porque tu SQL Server esta en tu equipo local.

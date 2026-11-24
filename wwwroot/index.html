@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Iniciar sesión · Cafetería</title>
+  <meta name="theme-color" content="#123c3a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Cafetería">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" href="icons/favicon-48.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body data-pagina="login">
+<div class="login-fondo">
+  <form class="login-tarjeta" id="login-form" novalidate>
+    <div class="logo">☕</div>
+    <h1>Portal de pedidos</h1>
+    <p class="sub">Inicia sesión para continuar</p>
+
+    <div id="login-error" class="aviso aviso-error" hidden></div>
+
+    <div class="campo">
+      <label for="correo">Correo</label>
+      <input type="email" id="correo" autocomplete="username" placeholder="correo@cafeteria.com" autofocus>
+    </div>
+    <div class="campo">
+      <label for="contrasena">Contraseña</label>
+      <div class="campo-clave">
+        <input type="password" id="contrasena" autocomplete="current-password" placeholder="••••••••">
+        <button type="button" id="ver-clave">Mostrar</button>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primario btn-bloque" id="btn-entrar">Iniciar sesión</button>
+    <button type="button" class="btn btn-secundario btn-bloque pwa-instalar" id="btn-instalar-app" hidden>📲 Instalar aplicación</button>
+  </form>
+</div>
+<script src="js/app.js"></script>
+<script src="js/login.js"></script>
+</body>
+</html>

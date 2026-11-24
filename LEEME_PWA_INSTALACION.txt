@@ -1,0 +1,64 @@
+CAFETERIAAPI - VERSION PWA INSTALABLE
+====================================
+
+ESTA VERSION SE BASA EN: CafeteriaAPI_Login_Corregido_Verde.zip
+Se conservaron Program.cs (excepto registro del MIME del manifiesto),
+controladores, clases Data/Modelos, conexion SQL Server, paginas y diseño verde.
+Se mantiene el inicio de sesion corregido que ya funcionaba.
+
+ARCHIVOS PWA AGREGADOS:
+- wwwroot/manifest.webmanifest: nombre, colores, iconos, pantalla inicial.
+- wwwroot/service-worker.js: precache de recursos publicos, aviso sin conexion.
+- wwwroot/offline.html: pagina sin internet, sin guardar datos.
+- wwwroot/icons/*.png: iconos de 192, 512, maskable, Apple y favicon.
+- Metadatos en las 9 paginas HTML; registro e instalacion en js/app.js.
+
+COMO PROBAR EN TU PC:
+1. Extrae TODO el ZIP, abre CafeteriaAPI.csproj en Visual Studio.
+2. Verifica que SQL Server local y DBCafeteria esten funcionando.
+3. Ejecuta con F5. Usa la URL http://localhost:5299 (o la indicada).
+4. Inicia sesion y comprueba que los modulos funcionen igual.
+5. En Chrome o Edge abre Herramientas del desarrollador > Application:
+   - Manifest: debe mostrar Cafeteria y los iconos.
+   - Service Workers: service-worker.js debe aparecer activado.
+6. Chrome / Edge: utiliza el icono Instalar de la barra de direcciones,
+   el menu del navegador, o el boton "Instalar app" cuando aparezca.
+   El boton solo se ve cuando el navegador considera instalable el sitio.
+7. Android: visita el sitio HTTPS en Chrome y selecciona Instalar aplicacion.
+8. iPhone/iPad: visita la URL HTTPS desde Safari, pulsa Compartir y elige
+   Agregar a pantalla de inicio (el boton web puede no aparecer en Safari).
+
+IMPORTANTE SOBRE INTERNET:
+- La PWA se puede instalar y abrir como aplicacion.
+- La pantalla offline se muestra al navegar sin conexion.
+- Consultar productos, iniciar sesion y registrar pedidos REQUIERE internet.
+- NO hay cola offline, sincronizacion de pedidos ni base de datos local.
+- Nunca se almacenan respuestas de /api, pedidos, sesiones, contraseñas o HTML
+  de usuarios en la Cache API del service worker.
+
+REQUISITOS DE PUBLICACION:
+- Usar HTTPS en Azure App Service o localhost para probar PWA.
+- Si el sitio se abre en otro dispositivo, localhost se refiere a ESE
+  dispositivo; no a tu laptop. Publica en HTTPS para instalar en celulares.
+- Para Azure SQL Database, coloca la cadena de conexion en App Service:
+  ConnectionStrings__CadenaSQL (o connection string llamada CadenaSQL).
+  NO publiques usuario/password SQL en repositorios o archivos distribuidos.
+
+ADVERTENCIA DE SEGURIDAD ANTES DE PUBLICAR:
+La autentificacion actual usa sessionStorage para controlar la interfaz,
+pero la API no tiene autorizacion del lado servidor en sus controladores.
+Esto NO es suficiente para exponer clientes, usuarios y pedidos en Internet.
+Antes de publicar, configura identidad/autorizacion real (cookies seguras o
+JWT validado por el servidor), permisos por rol, HTTPS, y elimina usuarios
+con contraseñas de demostracion. La conversión PWA no cambia esa lógica.
+
+SOPORTE:
+El proyecto original conserva net8.0 por compatibilidad. .NET 8 ya termino
+su soporte (10-nov-2026); antes de produccion migra a .NET 10 LTS y prueba.
+
+SI NO SE ACTUALIZA LA PWA:
+- Cierra y reabre la app; comprueba que el navegador recibio
+  la nueva version de service-worker.js.
+- En Chrome DevTools > Application > Service Workers, puedes dar Update.
+- No borres datos de la app si tienes otra informacion local que quieras
+  conservar. Esta PWA no implementa almacenamiento de pedidos offline.

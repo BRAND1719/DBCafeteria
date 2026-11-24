@@ -1,0 +1,10 @@
+CAFETERIA API - DISEÑO VERDE PETRÓLEO
+
+Se conservan los controladores, modelos, acceso a datos, JavaScript y páginas existentes.
+Se actualizó la paleta de colores en wwwroot/css/estilos.css y se retiró un texto de credenciales de demostración en index.html.
+
+Conexión: appsettings.json usa autenticación integrada de Windows a BRAND_19LAP\MSSQLSERVEREXP / DBCafeteria.
+Si tu SQL Server usa usuario sa, cambia la cadena por Server=BRAND_19LAP\MSSQLSERVEREXP;Database=DBCafeteria;User ID=sa;Password=TU_CLAVE;TrustServerCertificate=True; y elimina Integrated Security.
+
+Para ejecutar: abre CafeteriaAPI.csproj en Visual Studio y presiona F5.
+La conexión real debe comprobarse en el equipo donde está instalado SQL Server.
