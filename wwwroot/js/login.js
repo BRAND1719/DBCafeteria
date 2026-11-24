@@ -1,3 +1,6 @@
+// MODULO USUARIOS - Pantalla de inicio de sesion
+// Envia correo y contrasena a api/Usuario/login y guarda la sesion
+
 (function () {
   // Si ya hay sesion, entra directo
   if (usuarioActual()) { location.replace('dashboard.html'); return; }

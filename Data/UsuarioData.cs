@@ -1,3 +1,7 @@
+// MODULO USUARIOS - Acceso a datos
+// Procedimientos: sp_listaUsuarios, sp_obtenerUsuario, sp_crearUsuario,
+// sp_editarUsuario, sp_eliminarUsuario y sp_loginUsuario
+
 using CafeteriaAPI.Models;
 
 namespace CafeteriaAPI.Data

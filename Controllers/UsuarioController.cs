@@ -1,3 +1,9 @@
+// MODULO USUARIOS - Controlador
+// GET api/Usuario: lista de usuarios con filtro
+// GET api/Usuario/{id}: obtener un usuario
+// POST / PUT / DELETE: crear, editar y eliminar usuarios
+// POST api/Usuario/login: inicio de sesion (401 si es incorrecto o inactivo)
+
 using CafeteriaAPI.Data;
 using CafeteriaAPI.Models;
 using Microsoft.AspNetCore.Mvc;
