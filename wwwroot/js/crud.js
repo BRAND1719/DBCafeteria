@@ -8,6 +8,8 @@ function iniciarCrud(cfg) {
   const buscar = document.getElementById('buscar');
   const filtrosBox = document.getElementById('filtros-extra');
   const btnNuevo = document.getElementById('btn-nuevo');
+  const colsTabla = cfg.columnas.filter(c => !c.soloExcel);   // soloExcel: columna que solo sale en el Excel
+  const colspan = colsTabla.length + 1;
 
   let items = [];
   let editando = null;
@@ -16,8 +18,41 @@ function iniciarCrud(cfg) {
 
   /* ----- encabezado de la tabla ----- */
   thead.innerHTML = '<tr>' +
-    cfg.columnas.map(c => `<th class="${c.numerico ? 'num' : ''}">${esc(c.titulo)}</th>`).join('') +
+    colsTabla.map(c => `<th class="${c.numerico ? 'num' : ''}">${esc(c.titulo)}</th>`).join('') +
     '<th class="col-acciones">Acciones</th></tr>';
+
+  /* ----- paginacion: 10 registros por pagina ----- */
+  const paginador = crearPaginador(document.getElementById('tabla'), (item, i) => `
+      <tr>
+        ${colsTabla.map(c => `<td class="${c.numerico ? 'num' : ''}">${c.render ? c.render(item) : esc(item[c.campo])}</td>`).join('')}
+        <td class="col-acciones">
+          <button class="btn btn-secundario btn-chico" data-editar="${i}">Editar</button>
+          <button class="btn btn-peligro btn-chico" data-eliminar="${i}">Eliminar</button>
+        </td>
+      </tr>`);
+
+  /* ----- exportar a Excel todos los registros del apartado ----- */
+  botonExcel(btnNuevo.parentElement, async () => {
+    const r = await api(cfg.ruta);   // todos los registros, sin filtros
+    if (!r.ok) { toast((r.data && r.data.respuesta) || 'No se pudo obtener la información', 'error'); return; }
+    const titulo = cfg.plural.charAt(0).toUpperCase() + cfg.plural.slice(1);
+    // grafica de barras: la que defina la pagina (graficaExcel) o, por defecto, registros por estatus
+    const g = cfg.graficaExcel || { titulo: `${titulo} por estatus`, categoria: 'Estatus', agrupar: x => x.estatus ? 'Activo' : 'Inactivo' };
+    await exportarExcel(titulo.normalize('NFD').replace(/[\u0300-\u036f]/g, ''), [{
+      nombre: titulo,
+      titulo: `Reporte de ${cfg.plural}`,
+      columnas: cfg.columnas.map(c => ({
+        titulo: c.titulo,
+        formato: c.formatoExcel,
+        valor: item => c.excel ? c.excel(item) : (c.campo ? item[c.campo] : textoPlano(c.render(item)))
+      })),
+      filas: r.data,
+      grafica: {
+        titulo: g.titulo, categoria: g.categoria, serie: g.serie || 'Cantidad', formato: g.formato,
+        datos: agruparParaGrafica(r.data, g.agrupar, g.valor)
+      }
+    }]);
+  }, btnNuevo);
 
   /* ----- dialogo con el formulario ----- */
   const dlg = document.createElement('dialog');
@@ -58,10 +93,10 @@ function iniciarCrud(cfg) {
 
   /* ----- listado ----- */
   async function cargar() {
-    tbody.innerHTML = `<tr><td colspan="${cfg.columnas.length + 1}" class="vacio">Cargando…</td></tr>`;
+    paginador.mensaje(`<tr><td colspan="${colspan}" class="vacio">Cargando…</td></tr>`);
     const r = await api(cfg.ruta + qs({ filtro: buscar.value.trim(), ...filtrosExtra }));
     if (!r.ok) {
-      tbody.innerHTML = `<tr><td colspan="${cfg.columnas.length + 1}" class="vacio">No se pudo cargar la información</td></tr>`;
+      paginador.mensaje(`<tr><td colspan="${colspan}" class="vacio">No se pudo cargar la información</td></tr>`);
       toast(r.data?.respuesta || 'No se pudo cargar la información', 'error');
       return;
     }
@@ -70,18 +105,7 @@ function iniciarCrud(cfg) {
   }
 
   function pintar() {
-    if (!items.length) {
-      tbody.innerHTML = `<tr><td colspan="${cfg.columnas.length + 1}" class="vacio">No hay ${esc(cfg.plural)} para mostrar</td></tr>`;
-      return;
-    }
-    tbody.innerHTML = items.map((item, i) => `
-      <tr>
-        ${cfg.columnas.map(c => `<td class="${c.numerico ? 'num' : ''}">${c.render ? c.render(item) : esc(item[c.campo])}</td>`).join('')}
-        <td class="col-acciones">
-          <button class="btn btn-secundario btn-chico" data-editar="${i}">Editar</button>
-          <button class="btn btn-peligro btn-chico" data-eliminar="${i}">Eliminar</button>
-        </td>
-      </tr>`).join('');
+    paginador.mostrar(items, `<tr><td colspan="${colspan}" class="vacio">No hay ${esc(cfg.plural)} para mostrar</td></tr>`);
   }
 
   tbody.addEventListener('click', e => {

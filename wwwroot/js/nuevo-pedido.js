@@ -14,6 +14,17 @@
   let categoriaSel = '';
   const carrito = new Map(); // idProducto -> { producto, cantidad, obs }
 
+  // Paginacion de los productos: 12 por pagina
+  const paginador = crearPaginador(grid, p => `
+      <div class="tarjeta producto-card ${p.existencia < 1 ? 'agotado' : ''}">
+        <span class="cat">${esc(p.nombreCategoria)}</span>
+        <h3>${esc(p.nombre)}</h3>
+        <div class="desc">${esc(p.descripcion)}</div>
+        <div class="precio">${money(p.precio)}</div>
+        <div class="stock">${p.existencia < 1 ? 'Agotado' : 'Existencia: ' + p.existencia}</div>
+        <button type="button" class="btn btn-primario btn-chico" data-add="${p.idProducto}" ${p.existencia < 1 ? 'disabled' : ''}>Agregar</button>
+      </div>`, { porPagina: 12, tamanos: [6, 12, 24, 48] });
+
   const mostrarAviso = (texto, tipo = 'error') => {
     aviso.textContent = texto;
     aviso.className = 'aviso aviso-' + tipo;
@@ -41,7 +52,7 @@
       else { linea.producto = p; if (linea.cantidad > p.existencia) linea.cantidad = p.existencia; }
     }
     pintarChips();
-    pintarProductos();
+    pintarProductos(true);
     pintarCarrito();
   }
 
@@ -52,23 +63,16 @@
     ).join('');
   }
 
-  function pintarProductos() {
+  // mismaPagina = true cuando solo se recargan existencias (no cambia la pagina que estabas viendo)
+  function pintarProductos(mismaPagina = false) {
     const texto = buscar.value.trim().toLowerCase();
     const lista = productos.filter(p =>
       (!categoriaSel || p.nombreCategoria === categoriaSel) &&
-      (!texto || p.nombre.toLowerCase().includes(texto) || p.descripcion.toLowerCase().includes(texto)));
+      (!texto || p.nombre.toLowerCase().includes(texto) || (p.descripcion || '').toLowerCase().includes(texto)));
 
-    if (!lista.length) { grid.innerHTML = '<div class="vacio" style="grid-column:1/-1">No hay productos para mostrar</div>'; return; }
-
-    grid.innerHTML = lista.map(p => `
-      <div class="tarjeta producto-card ${p.existencia < 1 ? 'agotado' : ''}">
-        <span class="cat">${esc(p.nombreCategoria)}</span>
-        <h3>${esc(p.nombre)}</h3>
-        <div class="desc">${esc(p.descripcion)}</div>
-        <div class="precio">${money(p.precio)}</div>
-        <div class="stock">${p.existencia < 1 ? 'Agotado' : 'Existencia: ' + p.existencia}</div>
-        <button type="button" class="btn btn-primario btn-chico" data-add="${p.idProducto}" ${p.existencia < 1 ? 'disabled' : ''}>Agregar</button>
-      </div>`).join('');
+    const vacio = '<div class="vacio" style="grid-column:1/-1">No hay productos para mostrar</div>';
+    if (mismaPagina === true) paginador.actualizar(lista, vacio);
+    else paginador.mostrar(lista, vacio);
   }
 
   /* ---------- carrito ---------- */
@@ -123,7 +127,7 @@
     pintarChips();
     pintarProductos();
   });
-  buscar.addEventListener('input', pintarProductos);
+  buscar.addEventListener('input', () => pintarProductos());
 
   grid.addEventListener('click', e => {
     const b = e.target.closest('[data-add]');

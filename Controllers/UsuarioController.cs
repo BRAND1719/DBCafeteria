@@ -1,5 +1,6 @@
 using CafeteriaAPI.Data;
 using CafeteriaAPI.Models;
+using CafeteriaAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CafeteriaAPI.Controllers
@@ -9,10 +10,12 @@ namespace CafeteriaAPI.Controllers
     public class UsuarioController : ApiBase
     {
         private readonly UsuarioData _data;
+        private readonly CorreoService _correo;
 
-        public UsuarioController(UsuarioData data)
+        public UsuarioController(UsuarioData data, CorreoService correo)
         {
             _data = data;
+            _correo = correo;
         }
 
         [HttpGet]
@@ -31,7 +34,15 @@ namespace CafeteriaAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Crear([FromBody] Usuario modelo)
         {
-            return Resultado(await _data.Crear(modelo));
+            var r = await _data.Crear(modelo);
+
+            // Si se registro bien, se manda el correo de "registro exitoso"
+            if (r.numeroError == 0 && _correo.EnviarRegistroExitoso(modelo.Correo, modelo.Nombre, $"Ya puedes iniciar sesión en el portal de pedidos con este correo. Rol asignado: {modelo.Rol}."))
+            {
+                r.respuesta += " Se envió un correo de confirmación a " + modelo.Correo + ".";
+            }
+
+            return Resultado(r);
         }
 
         [HttpPut("{id:int}")]

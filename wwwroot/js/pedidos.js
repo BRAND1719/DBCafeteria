@@ -10,6 +10,43 @@
 
   let pedidos = [];
 
+  // Paginacion: 10 pedidos por pagina
+  const paginador = crearPaginador(document.getElementById('tabla'), p => `
+      <tr>
+        <td>#${p.idPedido}</td>
+        <td>${esc(p.fecha)}<small>${esc(p.hora)}</small></td>
+        <td>${esc(p.nombreCliente)}</td>
+        <td>${esc(p.metodoPago)}</td>
+        <td class="num">${money(p.total)}</td>
+        <td>${badgePedido(p.estatus)}</td>
+        <td class="col-acciones">
+          <button class="btn btn-secundario btn-chico" data-ver="${p.idPedido}">Ver</button>
+          ${p.estatus === 'Confirmado' ? `<button class="btn btn-peligro btn-chico" data-cancelar="${p.idPedido}">Cancelar</button>` : ''}
+        </td>
+      </tr>`);
+
+  // Exportar a Excel los pedidos de la consulta actual (sin filtros = todos)
+  botonExcel(document.querySelector('.barra-herramientas'), () => exportarExcel('Pedidos', [{
+    nombre: 'Pedidos',
+    titulo: 'Reporte de pedidos',
+    columnas: [
+      { titulo: 'Pedido', valor: p => p.idPedido },
+      { titulo: 'Fecha', valor: p => p.fecha },
+      { titulo: 'Hora', valor: p => p.hora },
+      { titulo: 'Cliente', valor: p => p.nombreCliente },
+      { titulo: 'Método de pago', valor: p => p.metodoPago },
+      { titulo: 'Total', valor: p => p.total, formato: 'moneda' },
+      { titulo: 'Estatus', valor: p => p.estatus }
+    ],
+    filas: pedidos,
+    grafica: {
+      titulo: 'Ventas confirmadas por día', categoria: 'Fecha', serie: 'Ventas', formato: 'moneda',
+      datos: agruparParaGrafica(pedidos.filter(p => p.estatus === 'Confirmado'), p => p.fecha, p => p.total, { ordenar: false, limite: 10000 })
+        .sort((a, b) => a[0].split('/').reverse().join('').localeCompare(b[0].split('/').reverse().join('')))
+        .slice(-31)   // ultimos 31 dias con ventas
+    }
+  }]));
+
   async function cargarClientes() {
     const r = await api('/Cliente');
     if (r.ok) {
@@ -23,7 +60,7 @@
       toast('La fecha inicial no puede ser mayor que la final', 'error');
       return;
     }
-    tbody.innerHTML = '<tr><td colspan="7" class="vacio">Cargando…</td></tr>';
+    paginador.mensaje('<tr><td colspan="7" class="vacio">Cargando…</td></tr>');
     const r = await api('/Pedido' + qs({
       idCliente: selCliente.value,
       estatus: selEstatus.value,
@@ -31,7 +68,7 @@
       fechaFin: fechaApi(fHasta.value)
     }));
     if (!r.ok) {
-      tbody.innerHTML = '<tr><td colspan="7" class="vacio">No se pudieron cargar los pedidos</td></tr>';
+      paginador.mensaje('<tr><td colspan="7" class="vacio">No se pudieron cargar los pedidos</td></tr>');
       toast((r.data && r.data.respuesta) || 'Error al consultar pedidos', 'error');
       return;
     }
@@ -44,23 +81,7 @@
     const suma = confirmados.reduce((s, p) => s + p.total, 0);
     resumenEl.textContent = `${pedidos.length} pedido(s) · ${confirmados.length} confirmado(s) · ventas confirmadas: ${money(suma)}`;
 
-    if (!pedidos.length) {
-      tbody.innerHTML = '<tr><td colspan="7" class="vacio">No hay pedidos con esos filtros</td></tr>';
-      return;
-    }
-    tbody.innerHTML = pedidos.map(p => `
-      <tr>
-        <td>#${p.idPedido}</td>
-        <td>${esc(p.fecha)}<small>${esc(p.hora)}</small></td>
-        <td>${esc(p.nombreCliente)}</td>
-        <td>${esc(p.metodoPago)}</td>
-        <td class="num">${money(p.total)}</td>
-        <td>${badgePedido(p.estatus)}</td>
-        <td class="col-acciones">
-          <button class="btn btn-secundario btn-chico" data-ver="${p.idPedido}">Ver</button>
-          ${p.estatus === 'Confirmado' ? `<button class="btn btn-peligro btn-chico" data-cancelar="${p.idPedido}">Cancelar</button>` : ''}
-        </td>
-      </tr>`).join('');
+    paginador.mostrar(pedidos, '<tr><td colspan="7" class="vacio">No hay pedidos con esos filtros</td></tr>');
   }
 
   async function verDetalle(id) {

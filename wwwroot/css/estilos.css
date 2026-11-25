@@ -281,3 +281,50 @@ dialog.dialogo::backdrop { background: rgba(35, 20, 12, .55); }
 @media (max-width: 480px) {
   .topbar .pwa-instalar { font-size: 12px; padding: 7px 9px; }
 }
+
+
+/* ---------- Carrusel del inicio de sesion ---------- */
+.login-fondo { position: relative; overflow: hidden; }
+.carrusel { position: absolute; inset: 0; }
+.carrusel .slide {
+  position: absolute; inset: 0; background-size: cover; background-position: center;
+  opacity: 0; transform: scale(1.06); transition: opacity 1.2s ease, transform 6s ease;
+}
+.carrusel .slide.activa { opacity: 1; transform: scale(1); }
+.carrusel::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(18, 60, 58, .72), rgba(18, 60, 58, .35));
+}
+.slide-texto {
+  position: absolute; left: 28px; bottom: 54px; z-index: 1;
+  color: #fff; font-size: 22px; font-weight: 700; text-shadow: 0 2px 10px rgba(0, 0, 0, .5);
+}
+.login-tarjeta { position: relative; z-index: 2; }
+.carrusel-puntos {
+  position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 8px; z-index: 2;
+}
+.carrusel-puntos button {
+  width: 10px; height: 10px; border-radius: 50%; border: 0; padding: 0; cursor: pointer;
+  background: rgba(255, 255, 255, .5); transition: background .2s, width .2s;
+}
+.carrusel-puntos button.activo { background: var(--acento); width: 26px; border-radius: 6px; }
+@media (max-width: 640px) { .slide-texto { display: none; } }
+@media (prefers-reduced-motion: reduce) { .carrusel .slide { transition: opacity .3s; transform: none; } }
+
+/* ---------- Paginacion de tablas ---------- */
+.paginacion {
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+  gap: 10px; padding: 12px 16px; border-top: 1px solid var(--borde); font-size: 13px; color: var(--suave);
+}
+.paginacion-controles { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.paginacion-controles label { display: inline-flex; align-items: center; gap: 6px; margin: 0 6px 0 0; font-size: 13px; }
+.paginacion-controles select { width: auto; min-width: 0; padding: 4px 8px; }
+.paginacion-pagina { padding: 0 6px; font-weight: 600; color: var(--texto); }
+
+/* ---------- Boton de Excel ---------- */
+.btn-excel { background: #1d6f42; color: #fff; }
+.btn-excel:hover:not(:disabled) { background: #155a35; }
+.barra-derecha { justify-content: flex-end; }
+.barra-herramientas .btn-excel { margin-left: auto; }
+.grid-productos + .paginacion { border-top: 0; padding: 16px 0 0; }

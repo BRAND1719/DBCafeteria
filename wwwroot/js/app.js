@@ -109,6 +109,83 @@ const badgeExistencia = n =>
     : n <= 5 ? `<span class="badge badge-aviso">${n} (bajo)</span>`
       : `<span class="badge badge-gris">${n}</span>`;
 
+/* ---------- Paginacion de tablas ---------- */
+// Muestra los datos de una tabla (o de una cuadricula) por paginas. render(item, indice) regresa el HTML de cada registro.
+// Uso: const pag = crearPaginador(document.getElementById('tabla'), render);  pag.mostrar(lista, htmlVacio);
+function crearPaginador(tabla, render, { porPagina = 10, tamanos = [5, 10, 20, 50] } = {}) {
+  const tbody = tabla.tagName === 'TABLE' ? tabla.querySelector('tbody') : tabla;
+  const nav = document.createElement('div');
+  nav.className = 'paginacion';
+  (tabla.closest('.tabla-wrap') || tabla).after(nav);
+
+  let datos = [];
+  let vacio = '';
+  let pagina = 1;
+
+  function pintar() {
+    const total = Math.max(1, Math.ceil(datos.length / porPagina));
+    pagina = Math.min(Math.max(1, pagina), total);
+    const inicio = (pagina - 1) * porPagina;
+    const visibles = datos.slice(inicio, inicio + porPagina);
+
+    tbody.innerHTML = datos.length ? visibles.map((d, i) => render(d, inicio + i)).join('') : vacio;
+
+    if (!datos.length) { nav.hidden = true; return; }
+    nav.hidden = false;
+    nav.innerHTML = `
+      <span class="paginacion-info">Mostrando ${inicio + 1}–${inicio + visibles.length} de ${datos.length}</span>
+      <div class="paginacion-controles">
+        <label>Filas <select data-por-pagina>
+          ${tamanos.map(n => `<option value="${n}" ${n === porPagina ? 'selected' : ''}>${n}</option>`).join('')}
+        </select></label>
+        <button type="button" class="btn btn-secundario btn-chico" data-pag="1" ${pagina === 1 ? 'disabled' : ''} aria-label="Primera página">«</button>
+        <button type="button" class="btn btn-secundario btn-chico" data-pag="${pagina - 1}" ${pagina === 1 ? 'disabled' : ''}>‹ Anterior</button>
+        <span class="paginacion-pagina">Página ${pagina} de ${total}</span>
+        <button type="button" class="btn btn-secundario btn-chico" data-pag="${pagina + 1}" ${pagina === total ? 'disabled' : ''}>Siguiente ›</button>
+        <button type="button" class="btn btn-secundario btn-chico" data-pag="${total}" ${pagina === total ? 'disabled' : ''} aria-label="Última página">»</button>
+      </div>`;
+  }
+
+  nav.addEventListener('click', e => {
+    const b = e.target.closest('[data-pag]');
+    if (b && !b.disabled) { pagina = +b.dataset.pag; pintar(); }
+  });
+  nav.addEventListener('change', e => {
+    if (e.target.matches('[data-por-pagina]')) { porPagina = +e.target.value; pagina = 1; pintar(); }
+  });
+
+  return {
+    // lista completa de registros; vuelve a la pagina 1
+    mostrar(lista, htmlVacio = '') { datos = lista || []; vacio = htmlVacio; pagina = 1; pintar(); },
+    // igual que mostrar, pero se queda en la misma pagina
+    actualizar(lista, htmlVacio = vacio) { datos = lista || []; vacio = htmlVacio; pintar(); },
+    // mensaje en lugar de la tabla (Cargando…, errores)
+    mensaje(html) { datos = []; vacio = html; pintar(); }
+  };
+}
+
+/* ---------- Exportar a Excel (la funcion exportarExcel esta en js/excel.js) ---------- */
+// Quita las etiquetas HTML (badges, <small>) para dejar solo el texto
+function textoPlano(html) {
+  const d = document.createElement('div');
+  d.innerHTML = html ?? '';
+  return d.textContent.trim();
+}
+
+// Crea el boton "Exportar a Excel" y lo pone dentro de contenedor (antes de referencia, si se indica)
+function botonExcel(contenedor, alHacerClic, referencia = null) {
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'btn btn-excel';
+  b.innerHTML = '📊 Exportar a Excel';
+  b.addEventListener('click', async () => {
+    b.disabled = true;
+    try { await alHacerClic(); } finally { b.disabled = false; }
+  });
+  contenedor.insertBefore(b, referencia);
+  return b;
+}
+
 /* ---------- Menu lateral y barra superior ---------- */
 const NAV = [
   { id: 'dashboard', texto: 'Dashboard', icono: '📊', href: 'dashboard.html' },

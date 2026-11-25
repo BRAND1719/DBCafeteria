@@ -1,11 +1,12 @@
 /* PWA Cafetería: caché únicamente de recursos estáticos públicos. */
-const CACHE_VERSION = 'cafeteria-pwa-static-v1';
+const CACHE_VERSION = 'cafeteria-pwa-static-v3';
 const CACHE_PREFIX = 'cafeteria-pwa-static-';
 const STATIC_FILES = [
   "offline.html",
   "css/estilos.css",
   "js/app.js",
   "js/crud.js",
+  "js/excel.js",
   "js/dashboard.js",
   "js/login.js",
   "js/nuevo-pedido.js",

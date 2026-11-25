@@ -1,5 +1,6 @@
 using CafeteriaAPI.Data;
 using CafeteriaAPI.Models;
+using CafeteriaAPI.Services;
 using Microsoft.AspNetCore.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,9 @@ builder.Services.AddScoped<ProductoData>();
 builder.Services.AddScoped<UsuarioData>();
 builder.Services.AddScoped<PedidoData>();
 builder.Services.AddScoped<ConsultaData>();
+
+// Correo de confirmacion de registro (configuracion en la seccion "Correo")
+builder.Services.AddSingleton<CorreoService>();
 
 // CORS: los origenes permitidos se configuran en appsettings.json ("Cors:Origenes")
 var origenes = builder.Configuration.GetSection("Cors:Origenes").Get<string[]>() ?? Array.Empty<string>();

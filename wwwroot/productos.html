@@ -15,7 +15,7 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" type="image/png" href="icons/favicon-48.png">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-  <link rel="stylesheet" href="css/estilos.css">
+  <link rel="stylesheet" href="css/estilos.css?v=3">
 </head>
 <body data-pagina="productos" data-titulo="Productos">
 <div class="layout">
@@ -34,8 +34,9 @@
   </div>
 </div>
 
-<script src="js/app.js"></script>
-<script src="js/crud.js"></script>
+<script src="js/app.js?v=3"></script>
+<script src="js/excel.js?v=3"></script>
+<script src="js/crud.js?v=3"></script>
 <script>
 const cargarCategorias = async () => {
   const r = await api('/Categoria');
@@ -45,10 +46,11 @@ const cargarCategorias = async () => {
 iniciarCrud({
   entidad: 'Producto', plural: 'productos', ruta: '/Producto', id: 'idProducto',
   columnas: [
-    { titulo: 'Producto', render: p => esc(p.nombre) + (p.descripcion ? '<small>' + esc(p.descripcion) + '</small>' : '') },
+    { titulo: 'Producto', excel: p => p.nombre, render: p => esc(p.nombre) + (p.descripcion ? '<small>' + esc(p.descripcion) + '</small>' : '') },
     { titulo: 'Categoría', campo: 'nombreCategoria' },
-    { titulo: 'Precio', numerico: true, render: p => money(p.precio) },
-    { titulo: 'Existencia', numerico: true, render: p => badgeExistencia(p.existencia) },
+    { titulo: 'Descripción', campo: 'descripcion', soloExcel: true },
+    { titulo: 'Precio', numerico: true, excel: p => p.precio, formatoExcel: 'moneda', render: p => money(p.precio) },
+    { titulo: 'Existencia', numerico: true, excel: p => p.existencia, formatoExcel: 'entero', render: p => badgeExistencia(p.existencia) },
     { titulo: 'Estatus', render: p => badgeEstatus(p.estatus) }
   ],
   campos: [
@@ -59,6 +61,7 @@ iniciarCrud({
     { campo: 'existencia', etiqueta: 'Existencia', tipo: 'number', entero: true, requerido: true, min: 0, paso: '1' },
     { campo: 'descripcion', etiqueta: 'Descripción', tipo: 'textarea', max: 200, completo: true }
   ],
+  graficaExcel: { titulo: 'Productos por categoría', categoria: 'Categoría', agrupar: p => p.nombreCategoria },
   filtrosExtra: [
     {
       parametro: 'idCategoria', etiqueta: 'Todas las categorías',
